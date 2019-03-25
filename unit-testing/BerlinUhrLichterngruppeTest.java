@@ -17,8 +17,11 @@
  */
 package berlinuhr;
 
+import java.awt.Color;
 import java.time.LocalTime;
-import javafx.scene.paint.Color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -37,9 +40,6 @@ public class BerlinUhrLichterngruppeTest {
     
     private BerlinUhrLichterngruppe lightsGroup;
     
-    public BerlinUhrLichterngruppeTest() {
-    }
-    
     @BeforeClass
     public static void setUpClass() {
         testTime = LocalTime.now();
@@ -54,14 +54,15 @@ public class BerlinUhrLichterngruppeTest {
     
     @Before
     public void setUp() {
-        lightsGroup = new BerlinUhrLichterngruppe(LocalTime.NOON);
+        testTime = LocalTime.NOON;
+        lightsGroup = new BerlinUhrLichterngruppe(testTime);
         System.out.println("Tested class instance re-initialized to noon");
     }
     
     @After
     public void tearDown() {
         testTime = lightsGroup.getTime();
-        System.out.println("Tested class instance exited test with time " + testTime.toString());
+        System.out.println("Tested class instance exited test with reported time " + testTime.toString());
     }
 
     /**
@@ -70,10 +71,9 @@ public class BerlinUhrLichterngruppeTest {
     @Test
     public void testSetTime() {
         System.out.println("setTime");
-        BerlinUhrLichterngruppe instance = new BerlinUhrLichterngruppe(testTime);
-        instance.setTime(testTime);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        testTime = LocalTime.now();
+        lightsGroup.setTime(testTime);
+        assertEquals(testTime, lightsGroup.getTime());
     }
 
     /**
@@ -82,11 +82,7 @@ public class BerlinUhrLichterngruppeTest {
     @Test
     public void testGetTime() {
         System.out.println("getTime");
-        BerlinUhrLichterngruppe instance = new BerlinUhrLichterngruppe(testTime);
-        LocalTime result = instance.getTime();
-        assertEquals(testTime, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(LocalTime.NOON, lightsGroup.getTime());
     }
 
     /**
@@ -95,8 +91,14 @@ public class BerlinUhrLichterngruppeTest {
     @Test
     public void testDecrementHour() {
         System.out.println("decrementHour");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        BerlinUhrLichterngruppe localLightsGroup;
+        for (int hh = 1; hh < 24; hh++) {
+            testTime = testTime.minusHours(1);
+            lightsGroup.decrementHour();
+            assertEquals(testTime, lightsGroup.getTime());
+            localLightsGroup = new BerlinUhrLichterngruppe(testTime);
+            assertEquals(localLightsGroup, lightsGroup);
+        }
     }
 
     /**
@@ -105,8 +107,14 @@ public class BerlinUhrLichterngruppeTest {
     @Test
     public void testIncrementHour() {
         System.out.println("incrementHour");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        BerlinUhrLichterngruppe localLightsGroup;
+        for (int hh = 1; hh < 24; hh++) {
+            testTime = testTime.plusHours(1);
+            lightsGroup.incrementHour();
+            assertEquals(testTime, lightsGroup.getTime());
+            localLightsGroup = new BerlinUhrLichterngruppe(testTime);
+            assertEquals(localLightsGroup, lightsGroup);
+        }
     }
 
     /**
@@ -115,8 +123,14 @@ public class BerlinUhrLichterngruppeTest {
     @Test
     public void testDecrementMinute() {
         System.out.println("decrementMinute");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        BerlinUhrLichterngruppe localLightsGroup;
+        for (int mm = 1; mm < 60; mm++) {
+            testTime = testTime.minusMinutes(1);
+            lightsGroup.decrementMinute();
+            assertEquals(testTime, lightsGroup.getTime());
+            localLightsGroup = new BerlinUhrLichterngruppe(testTime);
+            assertEquals(localLightsGroup, lightsGroup);
+        }
     }
 
     /**
@@ -125,8 +139,14 @@ public class BerlinUhrLichterngruppeTest {
     @Test
     public void testIncrementMinute() {
         System.out.println("incrementMinute");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        BerlinUhrLichterngruppe localLightsGroup;
+        for (int mm = 1; mm < 60; mm++) {
+            testTime = testTime.plusMinutes(1);
+            lightsGroup.incrementMinute();
+            assertEquals(testTime, lightsGroup.getTime());
+            localLightsGroup = new BerlinUhrLichterngruppe(testTime);
+            assertEquals(localLightsGroup, lightsGroup);
+        }
     }
     
     /**
@@ -135,8 +155,14 @@ public class BerlinUhrLichterngruppeTest {
     @Test
     public void testDecrementSecond() {
         System.out.println("decrementMinute");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        BerlinUhrLichterngruppe localLightsGroup;
+        for (int ss = 1; ss < 60; ss++) {
+            testTime = testTime.minusSeconds(1);
+            lightsGroup.decrementSecond();
+            assertEquals(testTime, lightsGroup.getTime());
+            localLightsGroup = new BerlinUhrLichterngruppe(testTime);
+            assertEquals(localLightsGroup, lightsGroup);
+        }
     }
 
     /**
@@ -145,8 +171,99 @@ public class BerlinUhrLichterngruppeTest {
     @Test
     public void testIncrementSecond() {
         System.out.println("incrementMinute");
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        BerlinUhrLichterngruppe localLightsGroup;
+        for (int ss = 1; ss < 60; ss++) {
+            testTime = testTime.plusSeconds(1);
+            lightsGroup.incrementSecond();
+            assertEquals(testTime, lightsGroup.getTime());
+            localLightsGroup = new BerlinUhrLichterngruppe(testTime);
+            assertEquals(localLightsGroup, lightsGroup);
+        }
+    }
+    
+    /**
+     * Test of toString method, of class BerlinUhrLichterngruppe. This test 
+     * ignores spaces.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        String expected = "Lichtern" + LocalTime.NOON.toString();
+        String actual = lightsGroup.toString().replace(" ", "");
+        assertEquals(expected, actual);
+        lightsGroup = new BerlinUhrLichterngruppe(LocalTime.MIDNIGHT);
+        expected = "Lichtern" + LocalTime.MIDNIGHT.toString();
+        actual = lightsGroup.toString().replace(" ", "");
+        assertEquals(expected, actual);
+        lightsGroup = new BerlinUhrLichterngruppe(LocalTime.MAX);
+        expected = "Lichtern" + LocalTime.MAX.toString();
+        actual = lightsGroup.toString().replace(" ", "");
+        assertEquals(expected, actual);
+    }
+    
+    /**
+     * Test of equals method, of class BerlinUhrLichterngruppe. Two light groups 
+     * should be considered equal if they correspond to the same hour and same 
+     * minute, and the second is of the same parity.
+     */
+    @Test
+    public void testEquals() {
+        System.out.println("equals");
+        BerlinUhrLichterngruppe secondLightsGroup = new BerlinUhrLichterngruppe(LocalTime.NOON);
+        assertEquals(lightsGroup, secondLightsGroup);
+        secondLightsGroup = new BerlinUhrLichterngruppe(LocalTime.MIDNIGHT);
+        assertNotEquals(lightsGroup, secondLightsGroup);
+        lightsGroup = new BerlinUhrLichterngruppe(LocalTime.MIDNIGHT);
+        assertEquals(lightsGroup, secondLightsGroup);
+        secondLightsGroup = new BerlinUhrLichterngruppe(LocalTime.MAX);
+        assertNotEquals(lightsGroup, secondLightsGroup);
+        lightsGroup = new BerlinUhrLichterngruppe(LocalTime.MAX);
+        assertEquals(lightsGroup, secondLightsGroup);
+    }
+    
+    /**
+     * Test of hashCode method, of class BerlinUhrLichterngruppe. Two light 
+     * groups should have the same hash code if they correspond to the same hour 
+     * and same minute, and the second is of the same parity.
+     */
+    @Test
+    public void testHashCode() {
+        System.out.println("hashCode");
+        BerlinUhrLichterngruppe secondLightsGroup = new BerlinUhrLichterngruppe(LocalTime.NOON);
+        assertEquals(lightsGroup.hashCode(), secondLightsGroup.hashCode());
+        secondLightsGroup = new BerlinUhrLichterngruppe(LocalTime.MIDNIGHT);
+        assertNotEquals(lightsGroup.hashCode(), secondLightsGroup.hashCode());
+        lightsGroup = new BerlinUhrLichterngruppe(LocalTime.MIDNIGHT);
+        assertEquals(lightsGroup.hashCode(), secondLightsGroup.hashCode());
+        secondLightsGroup = new BerlinUhrLichterngruppe(LocalTime.MAX);
+        assertNotEquals(lightsGroup.hashCode(), secondLightsGroup.hashCode());
+        lightsGroup = new BerlinUhrLichterngruppe(LocalTime.MAX);
+        assertEquals(lightsGroup.hashCode(), secondLightsGroup.hashCode());
+    }
+    
+    /**
+     * Test of compareTo method, of class BerlinUhrLichterngruppe, implementing 
+     * Comparable. Two light groups should be considered equal if they 
+     * correspond to the same hour and same minute, and the second is of the 
+     * same parity. If they differ in the hour and the minute, the earlier one 
+     * should be less than and the later one should be greater than. This test 
+     * does not prescribe what should happen if they differ only in the seconds.
+     */
+    @Test
+    public void testCompareTo() {
+        System.out.println("compareTo");
+        BerlinUhrLichterngruppe midnightGroup = new BerlinUhrLichterngruppe(LocalTime.MIDNIGHT);
+        BerlinUhrLichterngruppe maxGroup = new BerlinUhrLichterngruppe(LocalTime.MAX);
+        List<BerlinUhrLichterngruppe> sortedLights = new ArrayList<>();
+        sortedLights.add(midnightGroup);
+        sortedLights.add(lightsGroup);
+        sortedLights.add(maxGroup);
+        List<BerlinUhrLichterngruppe> toBeSortedLights = new ArrayList<>();
+        toBeSortedLights.add(maxGroup);
+        toBeSortedLights.add(midnightGroup);
+        toBeSortedLights.add(lightsGroup);
+        Collections.sort(toBeSortedLights);
+        assertEquals(sortedLights, toBeSortedLights);
     }
     
     /**
