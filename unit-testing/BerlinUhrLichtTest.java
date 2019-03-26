@@ -92,26 +92,32 @@ public class BerlinUhrLichtTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        String expected = "ausgeschaltet" + Color.RED.toString();
+        String expected = "ausgeschaltetLicht" + Color.RED.toString();
         String actual = redLight.toString().replace(" ", "");
+        System.out.println(actual);
         assertEquals(expected, actual);
         expected = expected.replace("aus", "ein");
         redLight.toggleStatus();
         actual = redLight.toString().replace(" ", "");
+        System.out.println(actual);
         assertEquals(expected, actual);
-        expected = "ausgeschaltet" + Color.GREEN.toString();
+        expected = "ausgeschaltetLicht" + Color.GREEN.toString();
         actual = greenLight.toString().replace(" ", "");
+        System.out.println(actual);
         assertEquals(expected, actual);
         expected = expected.replace("aus", "ein");
         greenLight.toggleStatus();
         actual = greenLight.toString().replace(" ", "");
+        System.out.println(actual);
         assertEquals(expected, actual);
-        expected = "ausgeschaltet" + Color.BLUE.toString();
+        expected = "ausgeschaltetLicht" + Color.BLUE.toString();
         actual = blueLight.toString().replace(" ", "");
+        System.out.println(actual);
         assertEquals(expected, actual);
         expected = expected.replace("aus", "ein");
         blueLight.toggleStatus();
         actual = blueLight.toString().replace(" ", "");
+        System.out.println(actual);
         assertEquals(expected, actual);
     }
     
@@ -142,31 +148,42 @@ public class BerlinUhrLichtTest {
     }
     
     /**
-     * Test of hashCode method, of class BerlinUhrLicht.
+     * Test of hashCode method, of class BerlinUhrLicht. Checks that the hash 
+     * codes for three lights, each on and off, makes for six distinct hash 
+     * codes. Also checks that off lights have negative hash codes and on lights 
+     * have positive hash codes.
      */
     @Test
     public void testHashCode() {
         System.out.println("hashCode");
         HashSet<Integer> lightHashes = new HashSet<>(6);
         int currHash = redLight.hashCode();
+        String assertionMessageOffLight = "Light that is off should have negative hash code";
+        assertTrue(assertionMessageOffLight, currHash < 0);
         System.out.println("Red light that is off hashed as " + currHash);
         lightHashes.add(currHash);
         redLight.toggleStatus();
         currHash = redLight.hashCode();
+        String assertionMessageOnLight = "Light that is on should have positive hash code";
+        assertTrue(assertionMessageOnLight, currHash > 0);
         System.out.println("Red light that is on hashed as " + currHash);
         lightHashes.add(currHash);
         currHash = greenLight.hashCode();
+        assertTrue(assertionMessageOffLight, currHash < 0);
         System.out.println("Green light that is off hashed as " + currHash);
         lightHashes.add(currHash);
         greenLight.toggleStatus();
         currHash = greenLight.hashCode();
+        assertTrue(assertionMessageOnLight, currHash > 0);
         System.out.println("Green light that is on hashed as " + currHash);
         lightHashes.add(currHash);
         currHash = blueLight.hashCode();
+        assertTrue(assertionMessageOffLight, currHash < 0);
         System.out.println("Blue light that is off hashed as " + currHash);
         lightHashes.add(currHash);
         blueLight.toggleStatus();
         currHash = blueLight.hashCode();
+        assertTrue(assertionMessageOnLight, currHash > 0);
         System.out.println("Blue light that is on hashed as " + currHash);
         lightHashes.add(currHash);
         String assertionMessage = "Set of BerlinUhrLicht hash codes should have six distinct hash codes";

@@ -74,6 +74,8 @@ public class BerlinUhrLichterngruppeTest {
         testTime = LocalTime.now();
         lightsGroup.setTime(testTime);
         assertEquals(testTime, lightsGroup.getTime());
+        BerlinUhrLichterngruppe comparisonLights = new BerlinUhrLichterngruppe(testTime);
+        assertEquals(comparisonLights, lightsGroup);
     }
 
     /**
