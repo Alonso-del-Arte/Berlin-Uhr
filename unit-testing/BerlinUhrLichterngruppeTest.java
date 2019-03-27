@@ -1,19 +1,18 @@
 /*
  * Copyright (C) 2019 Alonso del Arte
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it under 
+ * the terms of the GNU General Public License as published by the Free Software 
+ * Foundation, either version 3 of the License, or (at your option) any later 
+ * version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * You should have received a copy of the GNU General Public License along with 
+ * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package berlinuhr;
 
@@ -31,7 +30,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * Tests of the BerlinUhrLichterngruppe class. I've been going back on forth on 
+ * whether the round light at the top should blink on for odd or even seconds. 
+ * After deciding that the light group class should implement 
+ * <code>Comparable</code>, and that the comparison would be based on the hash 
+ * code, I ultimately decided that the second light should blink for odd 
+ * seconds.
  * @author Alonso del Arte
  */
 public class BerlinUhrLichterngruppeTest {
@@ -63,6 +67,7 @@ public class BerlinUhrLichterngruppeTest {
     public void tearDown() {
         testTime = lightsGroup.getTime();
         System.out.println("Tested class instance exited test with reported time " + testTime.toString());
+        System.out.println("Light group has this hash code (in binary): " + Integer.toString(lightsGroup.hashCode(), 2));
     }
 
     /**
@@ -94,7 +99,7 @@ public class BerlinUhrLichterngruppeTest {
     public void testDecrementHour() {
         System.out.println("decrementHour");
         BerlinUhrLichterngruppe localLightsGroup;
-        for (int hh = 1; hh < 24; hh++) {
+        for (int hh = 1; hh < 48; hh++) {
             testTime = testTime.minusHours(1);
             lightsGroup.decrementHour();
             assertEquals(testTime, lightsGroup.getTime());
@@ -110,7 +115,7 @@ public class BerlinUhrLichterngruppeTest {
     public void testIncrementHour() {
         System.out.println("incrementHour");
         BerlinUhrLichterngruppe localLightsGroup;
-        for (int hh = 1; hh < 24; hh++) {
+        for (int hh = 1; hh < 48; hh++) {
             testTime = testTime.plusHours(1);
             lightsGroup.incrementHour();
             assertEquals(testTime, lightsGroup.getTime());
@@ -126,7 +131,7 @@ public class BerlinUhrLichterngruppeTest {
     public void testDecrementMinute() {
         System.out.println("decrementMinute");
         BerlinUhrLichterngruppe localLightsGroup;
-        for (int mm = 1; mm < 60; mm++) {
+        for (int mm = 1; mm < 120; mm++) {
             testTime = testTime.minusMinutes(1);
             lightsGroup.decrementMinute();
             assertEquals(testTime, lightsGroup.getTime());
@@ -142,7 +147,7 @@ public class BerlinUhrLichterngruppeTest {
     public void testIncrementMinute() {
         System.out.println("incrementMinute");
         BerlinUhrLichterngruppe localLightsGroup;
-        for (int mm = 1; mm < 60; mm++) {
+        for (int mm = 1; mm < 120; mm++) {
             testTime = testTime.plusMinutes(1);
             lightsGroup.incrementMinute();
             assertEquals(testTime, lightsGroup.getTime());
@@ -156,9 +161,9 @@ public class BerlinUhrLichterngruppeTest {
      */
     @Test
     public void testDecrementSecond() {
-        System.out.println("decrementMinute");
+        System.out.println("decrementSecond");
         BerlinUhrLichterngruppe localLightsGroup;
-        for (int ss = 1; ss < 60; ss++) {
+        for (int ss = 1; ss < 120; ss++) {
             testTime = testTime.minusSeconds(1);
             lightsGroup.decrementSecond();
             assertEquals(testTime, lightsGroup.getTime());
@@ -172,9 +177,9 @@ public class BerlinUhrLichterngruppeTest {
      */
     @Test
     public void testIncrementSecond() {
-        System.out.println("incrementMinute");
+        System.out.println("incrementSecond");
         BerlinUhrLichterngruppe localLightsGroup;
-        for (int ss = 1; ss < 60; ss++) {
+        for (int ss = 1; ss < 120; ss++) {
             testTime = testTime.plusSeconds(1);
             lightsGroup.incrementSecond();
             assertEquals(testTime, lightsGroup.getTime());
@@ -255,12 +260,16 @@ public class BerlinUhrLichterngruppeTest {
     public void testCompareTo() {
         System.out.println("compareTo");
         BerlinUhrLichterngruppe midnightGroup = new BerlinUhrLichterngruppe(LocalTime.MIDNIGHT);
+        testTime = testTime.plusSeconds(1);
+        BerlinUhrLichterngruppe localGroup = new BerlinUhrLichterngruppe(testTime);
         BerlinUhrLichterngruppe maxGroup = new BerlinUhrLichterngruppe(LocalTime.MAX);
         List<BerlinUhrLichterngruppe> sortedLights = new ArrayList<>();
         sortedLights.add(midnightGroup);
         sortedLights.add(lightsGroup);
+        sortedLights.add(localGroup);
         sortedLights.add(maxGroup);
         List<BerlinUhrLichterngruppe> toBeSortedLights = new ArrayList<>();
+        toBeSortedLights.add(localGroup);
         toBeSortedLights.add(maxGroup);
         toBeSortedLights.add(midnightGroup);
         toBeSortedLights.add(lightsGroup);
@@ -292,6 +301,48 @@ public class BerlinUhrLichterngruppeTest {
             assertEquals(Color.RED, lightsGroup.eineStundeZeile[i].getColor());
             assertFalse(lightsGroup.eineMinuteZeile[i].getStatus());
             assertEquals(Color.ORANGE, lightsGroup.eineMinuteZeile[i].getColor());
+        }
+        assertFalse(assertionMessage, lightsGroup.rundeAnzeige.getStatus());
+        assertEquals(Color.ORANGE, lightsGroup.rundeAnzeige.getColor());
+        try {
+            System.out.println("Fifth 5-hour light is of color " + lightsGroup.funfStundenZeile[4].getColor().toString());
+            fail("There should only be four 5-hour lights");
+        } catch (IndexOutOfBoundsException ioobe) {
+            System.out.println("Trying to access fifth 5-hour light correctly triggered IndexOutOfBoundsException");
+            System.out.println("IndexOutOfBoundsException has this message: \"" + ioobe.getMessage() + "\"");
+        } catch (Exception e) {
+            String failMessage = "Exception " + e.getClass().getName() + " is wrong exception for trying to access fifth 5-hour light";
+            fail(failMessage);
+        }
+        try {
+            System.out.println("Fifth 1-hour light is of color " + lightsGroup.eineStundeZeile[4].getColor().toString());
+            fail("There should only be four 1-hour lights");
+        } catch (IndexOutOfBoundsException ioobe) {
+            System.out.println("Trying to access fifth 1-hour light correctly triggered IndexOutOfBoundsException");
+            System.out.println("IndexOutOfBoundsException has this message: \"" + ioobe.getMessage() + "\"");
+        } catch (Exception e) {
+            String failMessage = "Exception " + e.getClass().getName() + " is wrong exception for trying to access fifth 1-hour light";
+            fail(failMessage);
+        }
+        try {
+            System.out.println("Twelfth 5-minute light is of color " + lightsGroup.funfMinutenZeile[11].getColor().toString());
+            fail("There should only be eleven 5-minute lights");
+        } catch (IndexOutOfBoundsException ioobe) {
+            System.out.println("Trying to access twelfth 5-minute light correctly triggered IndexOutOfBoundsException");
+            System.out.println("IndexOutOfBoundsException has this message: \"" + ioobe.getMessage() + "\"");
+        } catch (Exception e) {
+            String failMessage = "Exception " + e.getClass().getName() + " is wrong exception for trying to access twelfth 5-minute light";
+            fail(failMessage);
+        }
+        try {
+            System.out.println("Fifth 1-minute light is of color " + lightsGroup.eineMinuteZeile[4].getColor().toString());
+            fail("There should only be four 1-minute lights");
+        } catch (IndexOutOfBoundsException ioobe) {
+            System.out.println("Trying to access fifth 1-minute light correctly triggered IndexOutOfBoundsException");
+            System.out.println("IndexOutOfBoundsException has this message: \"" + ioobe.getMessage() + "\"");
+        } catch (Exception e) {
+            String failMessage = "Exception " + e.getClass().getName() + " is wrong exception for trying to access fifth 1-minute light";
+            fail(failMessage);
         }
     }
     
